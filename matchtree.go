@@ -1141,6 +1141,15 @@ func (d *indexData) newMatchTree(q query.Q, opt matchTreeOpt) (matchTree, error)
 				return ok
 			},
 		}, nil
+	case *query.FileNamePredicate:
+		return &docMatchTree{
+			reason:  s.Reason,
+			numDocs: d.numDocs(),
+			predicate: func(docID uint32) bool {
+				fileName := d.fileName(docID)
+				return s.Predicate(fileName)
+			},
+		}, nil
 
 	case *query.BranchesRepos:
 		reposBranchesWant := make([]uint64, len(d.repoMetaData))

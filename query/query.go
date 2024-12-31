@@ -348,6 +348,18 @@ func NewFileNameSet(fileNames ...string) *FileNameSet {
 	return s
 }
 
+// FileNamePredicate is a predicate that can be used to filter file names.
+// It is not available in the RPC interface, and is only used in the library version of Zoekt
+type FileNamePredicate struct {
+	Predicate func([]byte) bool
+	Reason string
+}
+
+func (q *FileNamePredicate) String() string {
+	return fmt.Sprintf("(filenamepredicate %s)", q.Reason)
+}
+
+
 const (
 	TypeFileMatch uint8 = iota
 	TypeFileName
